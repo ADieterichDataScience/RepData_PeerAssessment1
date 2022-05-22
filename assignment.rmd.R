@@ -1,39 +1,27 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-author: "Andrew Dieterich"
-date: "`r Sys.Date()`"
-output: html_document
+  title: "Reproducible Research: Peer Assessment 1"
+  output: 
+  html_document:
+  keep_md: true
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-## Loading and preprocessing the data
+  
+  
+  ## Loading and preprocessing the data
     ## Are there differences in activity patterns between weekdays and weekends?
     ## reading in the data
+    getwd()
+  data <- read.csv("activity.csv", header = TRUE)
   
   ## viewing the data table from CSV file and its dimensions, and a preview:
-  
-```{r activity csv file}
-data <- read.csv("activity.csv", header = TRUE)
-View(data)
+  View(data)
   str(data)
   head(data)
   dim(data)
-```
-
-## What is mean total number of steps taken per day?
+  
+  
+  ## What is mean total number of steps taken per day?
   # histogram of steps taken
-
-``` {r histograms and more}
-
+  
   hist(data$steps, main = "Histogram of Steps")
   
   # total steps taken by day
@@ -48,10 +36,9 @@ View(data)
   
   ## Median and Mean steps taken per day:
   print(table[3:4])
-```
-
-## What is the average daily activity pattern?
-```{r finding average}
+  
+  
+  ## What is the average daily activity pattern?
   # time series plot
   ##  (i.e. type = "l") of the 5-minute interval (x-axis) 
   ##  and the average number of steps taken, averaged across all days (y-axis)
@@ -73,11 +60,9 @@ View(data)
   
   print("This is the interval with the maximum average steps:") 
   AVG$interval[which.max(AVG$avg)]
-```
+
 
 ## Imputing missing values
-
-```{r imputing missing values}
   print("Total number of missing values in the data set:") 
   sum(is.na(data$steps))
   
@@ -91,11 +76,10 @@ View(data)
   
   ## imputing missing values with the overall mean:
   data2$steps[is.na(data2$steps)] <- mean(data2$steps, na.rm=TRUE)
-```
-
-# re-doing the previous steps with missing values now added
+  
+  
+  # re-doing the previous steps with missing values now added
   ## first the histogram:
-```{r]}
   hist(data2$steps, main = "Histogram of Steps with missing values filled in")
   
   # total steps taken by day
@@ -130,20 +114,31 @@ View(data)
   
   # plotting a line graph with average daily steps divided by interval:
   plot(AVG2, type = "l", main = "AVG daily steps by interval, missing values filled in")
-```
-
-## Changing days to either weekday or weekend
-## To then make a two-graph plot with average steps divided by interval
-## For both weekdays, and weekends in order to examine any differences
-
-```{r}
-library(dplyr)
-data2$weekdays <- weekdays(data2$date)
-weekends <- c("Saturday", "Sunday")
-  data3 <- filter(data2, weekdays %in% weekends)
   
-  weekday_list <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
-  data4 <- filter(data2, weekdays %in% weekday_list)
+  # Last part of this assignment
+  ## For this part the weekdays() function may be of some help here
+  ## Use the dataset with the filled-in missing values for this part
+  
+  ## Create a new factor variable in the dataset with two levels 
+  ## – “weekday” and “weekend” indicating whether a given date 
+  ## is a weekday or weekend day.
+  
+  ## Make a panel plot containing a time series plot 
+  ## (i.e. type = "l") of the 5-minute interval (x-axis) 
+  ## and the average number of steps taken, 
+  ## averaged across all weekday days or weekend days (y-axis)
+  ## See the README file in the GitHub repository to see an 
+  ## example of what this plot should look like using simulated data
+  
+  str(data2)
+  View(data2)
+  
+  ## first subsetting data into new data frames by weekdays or weekend
+  weekends <- c("Saturday", "Sunday")
+  > data3 <- filter(data2, weekdays %in% weekends)
+  
+  > weekday_list <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+  > data4 <- filter(data2, weekdays %in% weekday_list)
   
   ## checking the number of rows equals the original data set
   nrow(data2) - nrow(data3) - nrow(data4)
@@ -166,16 +161,9 @@ weekends <- c("Saturday", "Sunday")
   
   dim(AVG3)
   length(unique(data5$interval))
-```
-# Including the final plot
-
-## plotting a line graph with average daily steps divided by interval:
-
-```{r plot}
-  library(ggplot2)
+  
+  # plotting a line graph with average daily steps divided by interval:
+  library(gglot2)
   
   ggplot(AVG3, aes(x = interval, y = avg, color = weekdays))+
     geom_line()+facet_grid(rows = vars(weekdays))
-```
-
-
